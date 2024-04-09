@@ -1,22 +1,19 @@
-"""
-URL configuration for stock_wire project.
+from django.urls import include, path  # Importamos las funciones include y path de Django
+from rest_framework import routers  # Importamos el enrutador proporcionado por DRF
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-from django.contrib import admin
-from django.urls import path
+from apps.users import views  # Importamos las vistas de nuestro proyecto
 
+# Creamos un enrutador predeterminado de DRF
+router = routers.DefaultRouter()
+
+# Registramos nuestras vistas en el enrutador
+router.register(r'users', views.UserViewSet)  # Registramos el UserViewSet bajo la ruta 'users'
+router.register(r'groups', views.GroupViewSet)  # Registramos el GroupViewSet bajo la ruta 'groups'
+
+# Configuramos las URLs para nuestra API utilizando el enrutamiento automático
+# Incluimos las URLs generadas por el enrutador
+# Además, incluimos las URLs de inicio de sesión para la API navegable
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('', include(router.urls)),  # Incluimos las URLs generadas por el enrutador
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))  # Incluimos las URLs de autenticación proporcionadas por DRF
 ]
