@@ -1,8 +1,4 @@
 from django.db import models
-
-# Create your models here.
-
-from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 from simple_history.models import HistoricalRecords
 
@@ -30,9 +26,10 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length = 255, unique = True)
-    email = models.EmailField('Email',max_length = 255, unique = True,)
-    name = models.CharField('Name', max_length = 255, blank = True, null = True)
+    email = models.EmailField('Email',max_length = 255, unique = True, blank = True, null = True)
+    name = models.CharField('Name', max_length=255, blank=False, null=False, default='DEFAULT_NAME')
     last_name = models.CharField('Lastname', max_length = 255, blank = True, null = True)
+    dni = models.CharField('Dni', max_length=255, unique=True, default='DEFAULT_DNI')
     image = models.ImageField('Image Profile', upload_to='perfil/', max_length=255, null=True, blank = True)
     is_active = models.BooleanField(default = True)
     is_staff = models.BooleanField(default = False)
