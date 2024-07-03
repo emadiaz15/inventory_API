@@ -43,7 +43,7 @@ MIDDLEWARE = [
     'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
-ROOT_URLCONF = 'stock_wire.urls'
+ROOT_URLCONF = 'inventory.urls'
 
 TEMPLATES = [
     {
@@ -61,10 +61,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'stock_wire.wsgi.application'
-
-# Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
+WSGI_APPLICATION = 'inventory.wsgi.application'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -83,9 +80,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = 'users.User'
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.0/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -98,8 +92,5 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
 }
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
