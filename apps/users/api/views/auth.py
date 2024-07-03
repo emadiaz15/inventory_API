@@ -6,6 +6,10 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from apps.users.models import User
 from ..serializers import UserSerializer, CustomTokenObtainPairSerializer
 
+@api_view(['GET'])
+def home_view(request):
+    return Response({"message": "¡Bienvenido!"})
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register_view(request):
