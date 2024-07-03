@@ -1,6 +1,7 @@
 from django.db import models
-from django.conf import settings
-from django.utils import timezone
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class Category(models.Model):
     name = models.CharField(max_length=200)
@@ -9,7 +10,7 @@ class Category(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name='categories', null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='categories', null=True)
     
     def __str__(self):
         return self.name
@@ -21,13 +22,14 @@ class Type(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name='types', null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='types', null=True)
     
     def __str__(self):
         return self.name
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
+    code = models.IntegerField(null=False, default=0)
     type = models.ForeignKey(Type, on_delete=models.SET_NULL, related_name='products', null=True)
     description = models.TextField(null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name='products', null=True)
@@ -35,7 +37,7 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name='products', null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='products', null=True)
     
     def __str__(self):
         return self.name
@@ -50,7 +52,7 @@ class WireProduct(Product):
 
 class Comment(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comments')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name='comments', null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='comments', null=True)
     text = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
@@ -62,8 +64,9 @@ class Comment(models.Model):
 class Stock(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='inventory')
     quantity = models.DecimalField(max_digits=15, decimal_places=2)
+    date = models.DateTimeField(auto_now=True)
     modified_at = models.DateTimeField(auto_now=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     
     def __str__(self):
         return f'Inventory for {self.product.name} on {self.date}'
